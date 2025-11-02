@@ -4,8 +4,10 @@ import Header from './components/Header.vue'
 import { useI18n } from 'vue-i18n'
 import { ref, reactive } from 'vue';
 import { watch } from 'vue';
+// import main from "../src/main"
 const check_domain =  window.location;
 const { t } = useI18n();
+
 
 
 
@@ -18,10 +20,6 @@ const { t } = useI18n();
 
 <template>
 
-
-
-
-
   <Header></Header>
 <div style="padding-top: 50px;">
   <p>
@@ -29,34 +27,46 @@ const { t } = useI18n();
   </p>
 </div> 
   <RouterView />
-<p>{{ $t('message.hello', { msg: 'hello' }) }}</p>
- <h1>{{ t("message.hello") }}</h1>
+<p>{{ $t('header.link_ref_trang_chu') }}</p>
+ <h1>{{ t("hi") }}</h1>
 <div class="">
-    <select v-model="$i18n.locale" class="mt-2 block">
+    <select id="language_input"   v-model="$i18n.locale" class="mt-2 block">
       <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale" class="">{{ locale }}</option>
     </select>
+
+    
   </div>
+  <button class="btn" id="btn_change">Change</button>
+
 </template>
 
 <script>
-export default {
-  name: "LocaleSwitcher",
-  data() {
-    return { locales: ["vi", "en"] };
-  },
-  methods: {
-    updateLanguage() {
-      localStorage.setItem("locale", this.$i18n.locale);
-    },
-  },
-  mounted() {
-    if (localStorage.getItem("locale")) {
-      this.$i18n.locale = localStorage.getItem("locale");
-    } else {
-      localStorage.setItem("locale", this.$i18n.locale);
-    }
-  },
-};
+
+
+// const button = document.getElementById("btn_change");
+// button.addEventListener("click", function() {
+//   //console.log(document.getElementById("language_input").value);
+//   console.log("ok");
+// });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const element = document.querySelector('#btn_change');
+                if (element) { // Always check if the element exists
+                    element.addEventListener('click', function() {
+                        // Your code here
+                        console.log(document.getElementById("language_input").value);
+                        if(document.getElementById("language_input").value == "vi") {
+                          document.getElementById("language_input").value = "en";
+                          console.log(document.getElementById("language_input").value);
+                        } else {
+                          document.getElementById("language_input").value = "vi";
+                          console.log(document.getElementById("language_input").value);
+                        }
+                    });
+                }
+            });
+
+
 </script>
 
 <style scoped>

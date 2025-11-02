@@ -4,24 +4,18 @@ import router from './router'
 import { createI18n } from 'vue-i18n'
 import { createApp } from 'vue'
 import { onMounted } from 'vue'
-
+import vi from '../public/language/vi.json'
+import en from '../public/language/en.json'
 const app = createApp(App);
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'vi',
-  fallbackLocale: 'en',
-  messages: {
-    en: {
-      message: {
-        hello: 'hello world'
-      }
-    },
-    vi: {
-      message: {
-        hello: 'Xin Chào'
-      }
-    }
+  locale: 'en',
+  //fallbackLocale: 'en',
+  keySeparator: false,
+   messages: {
+    en: en,
+    vi: vi
   }
 });
 
@@ -30,5 +24,3 @@ const i18n = createI18n({
 app.use(router)
 app.use(i18n)
 app.mount('#app')
-
-i18n.global.locale = 'en'
