@@ -11,11 +11,11 @@ const app = createApp(App);
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  //fallbackLocale: 'en',
+  fallbackLocale: 'vi',
   keySeparator: false,
    messages: {
-    en: en,
-    vi: vi
+    en,
+    vi
   }
 });
 

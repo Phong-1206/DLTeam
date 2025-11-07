@@ -5,77 +5,59 @@ import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n();
 const { t } = useI18n();
-console.log(t("header.link_ref_trang_chu"));
 const check_domain =  window.location;
 const link_ref = [
   {
-    name: "t('header.link_ref_trang_chu')",
+    name: "header_link_ref_trang_chu",
     url : "/"    
   },
   {
-    name: t("header.link_ref_tai_xuong"),
+    name: "header_link_ref_tai_xuong",
     url: "/taixuong"
   },
   {
-    name: t("header.link_ref_qr_code"),
+    name: "header_link_ref_qr_code",
     url: "/qr-code"
   }, 
   {
-    name: t("header.link_ref_tai_lieu"),
+    name: "header_link_ref_tai_lieu",
     url: "/tailieu"
   }
 ];
 
-const btn_href = ref({
-  name: "Bắt Đầu",
-  url: "/url"
-});
+//const hien_ten_header = (items, check_domain) => {
+  // if(items.url == "/"){
+  //   return t(items.name);
+  // }else if(items.url == "/taixuong"){
+  //   return t(items.name);
+  // }else if(items.url == "/qr-code"){
+  //   return t(items.name);
+  // }else{
+  //   return t(items.name);
+  // }
+//};
 
-/////////////////////////////////////////
-///// LOGIC CHUYEN NGON NGU /////////
-//onMounted(() => {isActiveBtn = window.localStorage.getItem('language')});
-
-// const change_language = () => {
-//   const get_language = localStorage.getItem("locale");
-//   if (get_language == "vi") {
-//     localStorage.setItem("locale", "en");
-//   }else {
-//     localStorage.setItem("locale", "vi");
-//   }
-//   window.location.reload(true);
-// };
-
-////Danh sách ngôn ngữ có sẵn /////
 const locales = ref(["en","vi"]); 
-
-const setLanguage = (language) => {
-  if (language == "vi"){
-    //document.getElementById('btnsetlanguagevi').remove();
-    locale.value = "en";
-    localStorage.setItem("locale",language);
-  }else{
-    //document.getElementById('btnsetlanguageen').remove();
-    locale.value = "vi";
-    localStorage.setItem("locale",language);
-  }
-};
-
 onMounted(() => {
-  const getLanguage = localStorage.getItem("locale");
-  if(getLanguage) {
-    locale.value = getLanguage;
+  if(localStorage.getItem("locale")) {
+    locale.value = localStorage.getItem("locale");
   } else {
     localStorage.setItem("locale",locale.value);
   };
 });
 
+const setLanguage = (language) => {
+  if (language == "vi"){
+    locale.value = "en";
+    localStorage.setItem("locale",locale.value);
+  }else{
+    locale.value = "vi";
+    localStorage.setItem("locale",locale.value);
+  }
+};
 
 
 
-//console.log(locale.value);
-
-
-///////////////////////////////
 
 
 const icon_logo = ref(reactive({
@@ -110,7 +92,6 @@ const navstyle = ref(reactive({
         {{ items }}
   </button>
 
-<!--v-for="items in locales" :key="items"    :class="locale === items ? '' : 'invisible'" -->
 
       <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
@@ -122,9 +103,17 @@ const navstyle = ref(reactive({
   <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
       
-      <li v-for="items in link_ref" :key="items.name">
-        <a :href="items.url" v-if="check_domain.pathname == items.url" v-bind:class="navstyle.style_true" aria-current="page">{{ items.name }}</a>
-        <a :href="items.url" v-else="check_domain.pathname == items.url" v-bind:class="navstyle.style_false" aria-current="page">{{ items.name }}</a>
+      <li v-for="(items,index) in link_ref" :key="items.name">
+        <a :href="items.url" 
+        v-if="check_domain.pathname == items.url" 
+        v-bind:class="navstyle.style_true" 
+        aria-current="page">{{ t(items.name) }}</a>
+        
+        
+        <a :href="items.url"
+         v-else="check_domain.pathname == items.url" 
+         v-bind:class="navstyle.style_false" 
+         aria-current="page">{{ t(items.name) }}</a>
       </li>
     </ul>
   </div>
@@ -133,26 +122,5 @@ const navstyle = ref(reactive({
 </header>
 </template>
 <script>
-
-// export default {
-//   name: "SaveLanguageLocalStorage",
-//   data() {
-//     return { locales: ["vi", "en"] };
-//   },
-//   methods: {
-//     updateLanguage() {
-//       localStorage.setItem("locale", this.$i18n.locale);
-//       sessionStorage.setItem('locale', this.$i18n.locale);
-//     },
-//   },
-//   mounted() {
-//     if (localStorage.getItem("locale") && sessionStorage.getItem('locale')) {
-//       this.$i18n.locale = localStorage.getItem("locale");
-//     } else {
-//       localStorage.setItem("locale", this.$i18n.locale);
-//       sessionStorage.setItem('locale', this.$i18n.locale);
-//     }
-//   },
-// };
 </script>
 <style scoped></style>

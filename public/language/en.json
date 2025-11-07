@@ -1,9 +1,7 @@
 {
-    "header": {
-        "link_ref_trang_chu" : "Home",
-        "link_ref_tai_xuong" : "Download Video",
-        "link_ref_qr_code" : "QR - Code",
-        "link_ref_tai_lieu" : "Document"
-    },
-    "hi": "Hi"
+    "header_link_ref_trang_chu":"Home",
+    "header_link_ref_tai_xuong":"Download Video",
+    "header_link_ref_qr_code":"QR - Code",
+    "header_link_ref_tai_lieu":"Document",
+    "hi":"Hiiiii Bro"
 }
