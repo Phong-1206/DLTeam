@@ -3,5 +3,26 @@
     "header_link_ref_tai_xuong":"Tải Xuống",
     "header_link_ref_qr_code":"QR - Code",
     "header_link_ref_tai_lieu":"Tài Liệu",
-    "hi":"Xin Chào"
+    
+    "hero_intro": "Khám Phá",
+    "hero_title":"Nơi mọi công cụ trong tầm tay.",
+    "hero_describe": "Tải video, tạo mã QR, chia sẻ source code và nhiều tiện ích khác — tất cả đều miễn phí và dễ dùng.",
+    "hero_btn_main": "Bắt đầu ngay",
+    "hero_btn_secondary": "Xem tính năng",
+    "hero_rating": "from {0}k reviews",
+
+    "explore_intro" : "Khám Phá",
+    "explore_title":"Tính năng phổ biến",
+    "explore_describe": "Chúng tôi tạo ra những công cụ miễn phí và dịch vụ thiết kế web giúp bạn học, sáng tạo và kết nối. Chỉ vài cú nhấp chuột, bạn có thể tải video, tạo QR, chia sẻ mã nguồn hoặc xây dựng website chuyên nghiệp cho riêng mình.",
+    "explore_media_download_title": "Lưu video về máy nhanh chóng",
+    "explore_media_download_describe": "Chỉ cần dán link video là DLTeam sẽ giúp bạn tải về file MP4/MP3 chất lượng cao. Hỗ trợ nhiều nền tảng phổ biến và tùy chọn định dạng để bạn dùng offline hoặc chia sẻ lại dễ dàng.",
+    "explore_qr_title":"Trình tạo mã QR dễ dùng",
+    "explore_qr_describe": "Chọn loại nội dung (URL, văn bản, Liên hệ, Wi-Fi), tuỳ chỉnh màu sắc và tải về dưới dạng PNG/SVG để in ấn hoặc dùng online. Mã QR rõ nét, tương thích mọi máy quét.",
+    "explore_share_code_title": "Tài nguyên lập trình viên",
+    "explore_share_code_describe": "Tiện cho việc sử dụng mã nguồn xu hướng chúng tôi sẽ tải lên dưới dạng nhúng blog. Bạn có thể chia sẽ cho người thân yêu chỉ bạn một cú nhấp chuột.",
+    "explore_desgin_web_title": "Thiết kế website",
+    "explore_desgin_web_describe": "Landing Page đến cửa hàng, mình có thể thiết kế responsive, tối ưu cho di động và thân thiện SEO. Các hỗ trợ bao gồm tư vấn ý tưởng, giao diện và triển khai.",
+    
+    "footer_describe":"Nền tảng chia sẻ công cụ và ý tưởng sáng tạo, giúp mọi người dễ dàng làm việc, học tập và kết nối trong kỷ nguyên số.",
+    "footer_copyright": "Bản quyền © {0}. Bảo lưu mọi quyền."
 }

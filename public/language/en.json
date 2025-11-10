@@ -3,5 +3,26 @@
     "header_link_ref_tai_xuong":"Download Video",
     "header_link_ref_qr_code":"QR - Code",
     "header_link_ref_tai_lieu":"Document",
-    "hi":"Hiiiii Bro"
+    
+    "hero_intro": "Explore",
+    "hero_title":"Where every tool is within your reach.",
+    "hero_describe": "Download videos, create QR codes, share source code, and access many other utilities — all free and easy to use.",
+    "hero_btn_main": "Get Started",
+    "hero_btn_secondary": "View Features",
+    "hero_rating": "from {0}k reviews",
+
+    "explore_intro" : "Explore",
+    "explore_title":"Popular Features",
+    "explore_describe": "We create free tools and web design services to help you learn, create, and connect. With just a few clicks, you can download videos, generate QR codes, share code snippets, or build your own professional website.",
+    "explore_media_download_title": "Download videos quickly to your device",
+    "explore_media_download_describe": "Just paste a video link, and DLTeam will help you download high-quality MP4/MP3 files. Supports many popular platforms and formats, making it easy to use offline or share again.",
+    "explore_qr_title":"Easy-to-use QR Code Generator",
+    "explore_qr_describe": "Choose the content type (URL, Text, Contact, Wi-Fi), customize colors, and download as PNG/SVG for printing or online use. Crisp QR codes compatible with all scanners.",
+    "explore_share_code_title": "Developer Resources",
+    "explore_share_code_describe":"Convenient for using trending code snippets — we’ll upload them as embeddable blog content. You can share them with your loved ones with just one click.",
+    "explore_desgin_web_title": "Website Design",
+    "explore_desgin_web_describe": "From landing pages to online stores, we design responsive, mobile-optimized, and SEO-friendly websites. Support includes idea consulting, interface design, and implementation.",
+    
+    "footer_describe":"A platform for sharing tools and creative ideas, helping everyone work, learn, and connect easily in the digital era.",
+    "footer_copyright": "Copyright © {0}. All rights reserved."
 }

@@ -1,7 +1,8 @@
 <script setup>
 import { computed, reactive, ref, watch  } from 'vue';
-import btn_change_language from '../composables/btn_change_language.vue';
-import { onMounted } from 'vue';
+import btn_change_language from '../composables/logo_web.vue';
+import logo_web from "@/composables/logo_web.vue"
+//import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n();
 const { t } = useI18n();
@@ -24,27 +25,8 @@ const link_ref = [
     url: "/tailieu"
   }
 ];
-
-//const hien_ten_header = (items, check_domain) => {
-  // if(items.url == "/"){
-  //   return t(items.name);
-  // }else if(items.url == "/taixuong"){
-  //   return t(items.name);
-  // }else if(items.url == "/qr-code"){
-  //   return t(items.name);
-  // }else{
-  //   return t(items.name);
-  // }
-//};
-
 const locales = ref(["en","vi"]); 
-onMounted(() => {
-  if(localStorage.getItem("locale")) {
-    locale.value = localStorage.getItem("locale");
-  } else {
-    localStorage.setItem("locale",locale.value);
-  };
-});
+
 
 const setLanguage = (language) => {
   if (language == "vi"){
@@ -77,10 +59,7 @@ const navstyle = ref(reactive({
 <header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3">
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-  <a :href="icon_logo.url" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <img :src="icon_logo.logo" class="h-8" :alt="icon_logo.name + ' Logo'">
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{{ icon_logo.name }}</span>
-  </a>
+ <logo_web></logo_web>
   <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
 
       <button type="button" 
