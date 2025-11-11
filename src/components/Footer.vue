@@ -1,5 +1,13 @@
 <script setup>
 import logo_web from '@/composables/logo_web.vue';
+///////// SET NGÔN NGỮ //////
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n();
+const { t } = useI18n();
+import { inject } from 'vue';
+
+const link_header = inject('link_header');
+////////////////////////////
 </script>
 <template>
 <footer class="bg-gray-100">
@@ -35,19 +43,19 @@ import logo_web from '@/composables/logo_web.vue';
         </div>
 
         <p class="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500 lg:text-left">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet
-          culpa cum itaque neque.
+          
+          {{t("footer_describe")}}
         </p>
       </div>
 
       <ul class="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
-        <li>
-          <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> About </a>
+        <li v-for="items in link_header" :key="items.name">
+          <a class="text-gray-700 transition hover:text-gray-700/75" :href="items.url"> {{ t(items.name)}} </a>
         </li>
 
-        <li>
+        <!-- <li>
           <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Services </a>
-        </li>
+        </li>ite
 
         <li>
           <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Projects </a>
@@ -55,12 +63,12 @@ import logo_web from '@/composables/logo_web.vue';
 
         <li>
           <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Blog </a>
-        </li>
+        </li> -->
       </ul>
     </div>
 
     <p class="mt-12 text-center text-sm text-gray-500 lg:text-right">
-      Copyright © 2022. All rights reserved.
+      {{ t("footer_copyright", [2025]) }}
     </p>
   </div>
 </footer>

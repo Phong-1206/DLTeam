@@ -1,14 +1,22 @@
 <script setup>
 
+
+/////// SET NGÔN NGỮ /////
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+//const { locale } = useI18n();
+/////////////////////////
+
+
 </script>
 <template>
 <div class="bg-white py-12 sm:py-12">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto max-w-2xl lg:text-center">
-      <h2 class="text-base/7 font-semibold text-indigo-600">Khám phá</h2>
-      <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">Tính năng phổ biến DLTeam</p>
+      <h2 class="text-base/7 font-semibold text-indigo-600">{{ t("explore_intro") }}</h2>
+      <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">{{t("explore_title")}} DLTeam</p>
       <p class="mt-6 text-lg/8 text-gray-700">
-        Chúng tôi tạo ra những công cụ miễn phí và dịch vụ thiết kế web giúp bạn học, sáng tạo và kết nối. Chỉ vài cú nhấp chuột, bạn có thể tải video, tạo QR, chia sẻ mã nguồn hoặc xây dựng website chuyên nghiệp cho riêng mình.
+        {{ t("explore_describe") }}
       </p>
     </div>
     <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -24,11 +32,10 @@
                 <path d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" stroke-linecap="round" stroke-linejoin="round" />
               </svg> -->
             </div>
-            Lưu video về máy nhanh chóng
+            {{ t("explore_media_download_title") }}
           </dt>
           <dd class="mt-2 text-base/7 text-gray-600">
-            Chỉ cần dán link video là DLTeam sẽ giúp bạn tải về file MP4/MP3 chất lượng cao. Hỗ trợ nhiều nền tảng phổ biến và tùy chọn định dạng để bạn dùng offline hoặc chia sẻ lại dễ dàng.
-          
+            {{ t("explore_media_download_describe") }}
           </dd>
         </div>
         <div class="relative pl-16">
@@ -43,10 +50,10 @@
 </svg>
 
             </div>
-            Trình tạo mã QR dễ dùng
+            {{ t("explore_qr_title") }}
           </dt>
           <dd class="mt-2 text-base/7 text-gray-600">
-            Chọn loại nội dung (URL, văn bản, Liên hệ, Wi-Fi), tuỳ chỉnh màu sắc và tải về dưới dạng PNG/SVG để in ấn hoặc dùng online. Mã QR rõ nét, tương thích mọi máy quét.
+             {{ t("explore_qr_describe") }}
           </dd>
         </div>
         <div class="relative pl-16">
@@ -59,11 +66,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
               </svg>
             </div>
-            Tài nguyên lập trình viên
+            {{ t("explore_share_code_title") }}
           </dt>
           <dd class="mt-2 text-base/7 text-gray-600">
-            Tiện cho việc sử dụng mã nguồn xu hướng chúng tôi sẽ tải lên dưới dạng nhúng blog. Bạn có thể chia sẽ cho người thân yêu chỉ bạn một cú nhấp chuột. 
-          
+            {{ t("explore_share_code_describe") }}
           </dd>
         </div>
         <div class="relative pl-16">
@@ -76,10 +82,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
               </svg>
             </div>
-            Thiết kế website
+            {{ t("explore_desgin_web_title") }}
           </dt>
           <dd class="mt-2 text-base/7 text-gray-600">
-            Landing Page đến cửa hàng, mình có thể thiết kế responsive, tối ưu cho di động và thân thiện SEO. Các hỗ trợ bao gồm tư vấn ý tưởng, giao diện và triển khai.
+            
+            {{ t("explore_desgin_web_describe") }}
+
           </dd>
         </div>
       </dl>

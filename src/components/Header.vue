@@ -3,9 +3,11 @@ import { computed, reactive, ref, watch  } from 'vue';
 import btn_change_language from '../composables/logo_web.vue';
 import logo_web from "@/composables/logo_web.vue"
 //import { onMounted } from 'vue';
+///////// SET NGÔN NGỮ //////
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n();
 const { t } = useI18n();
+////////////////////////////
 const check_domain =  window.location;
 const link_ref = [
   {
