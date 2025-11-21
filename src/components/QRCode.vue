@@ -1,83 +1,49 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 import { initFlowbite } from 'flowbite'
-import {ref} from "vue";
+import {ref,reactive} from "vue";
 import {watch} from "vue";
-const test = ref();
+import { inject } from 'vue';
+//import Qrcode from "vue-qrcode";
+//import QRCode from "qrcode";
+import QRCodeVue3 from "qrcode-vue3";
+import { nextTick } from "vue";
+const test = ref("");
 onMounted(() => {
     initFlowbite();
     watch(test, (newValue, oldValue) => {
         console.log( newValue+ " oldValue: "+ oldValue);
 })
 });
-//const old_click = ref();
+const list_create_qr = inject('list_qr');
 
-const class_nice = ref('data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-sm font-medium text-gray-700 text-center dark:text-gray-300 hover:bg-indigo-600 hover:text-white');
-const test_click = (name_app) => {
-    //console.log(name_app);
-    test.value = name_app;
+const class_active = ref("");
+const input_active = ref({
+    type: "",
+    placeholder: "",
+    images: ""
+});
+const test_click = (items) => {
+    class_active.value = items.name;
+    input_active.value.type = items.type[0];
+    input_active.value.placeholder = items.data[0][0];
+    input_active.value.images = items.icon;
+    console.log(items.data[0][0]);
 
-//     // let elements = document.getElementsByClassName(name_app);
-//     // console.log(elements);
 };
-const list_create_qr =[
-    {
-        name: "Url",
-        icon: "icon_url.png"
-    },
-    {
-        name: "Text",
-        icon: "icon_text.png"
-    },
-    {
-        name: "Email",
-        icon: "icon_email.webp"
-    },
-    {
-        name: "Phone",
-        icon: "icon_phone.png"
-    },
-    {
-        name: "Facebook",
-        icon: "icon_facebook.png"
-    },
-    {
-        name: "Youtube",
-        icon: "icon_youtube.png"
-    },
-        {
-        name: "Tiktok",
-        icon: "icon_tiktok.avif"
-    },
-    {
-        name: "Instagram",
-        icon: "icon_instagram.webp"
-    },
-    {
-        name: "Zalo",
-        icon: "icon_zalo.webp"
-    },
-    {
-        name: "Linkedin",
-        icon: "icon_linkedin.webp"
-    },
-        {
-        name: "Spotifi",
-        icon: "icon_spotify.png"
-    },
-    {
-        name: "X (Twitter)",
-        icon: "icon_x.png"
-    },
-    {
-        name: "Discord",
-        icon: "icon_discord.png"
-    },
-    {
-        name: "Telegram",
-        icon: "icon_telegram.png"
-    }
-]
+const qrRef = ref();
+const src_url_qr = ref("");
+const size_qr = 200;
+const duoi_file = ref("png");
+const dlIsActive = ref(true);
+const DownloadPNG = async () => {
+    // dlIsActive.value = !dlIsActive.value;
+    await nextTick();
+    const btn = qrRef.value?.$el.querySelector(".hidden-download-btn");
+  if (!btn) return alert("Đã xảy ra lỗi trong quá trình tạo QR, bạn có thể báo lại cho admin nhé!");
+
+  btn.click(); 
+};
 </script>
 <template>
 <div class="bg-white py-12 sm:py-12">
@@ -116,64 +82,89 @@ const list_create_qr =[
 
             <div 
             v-for="items in list_create_qr" 
-            :key="items.name" 
-            :class="class_nice"
-            @click="test_click(items.name)">
+            :key="items.name"
+            class="data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-sm font-medium text-gray-700 text-center dark:text-gray-300 hover:bg-indigo-600 hover:text-white" 
+            :class="class_active == items.name ? 'active-card':'noactive-card'"
+            @click="test_click(items)">
                     <div class="flex text-4xl mb-2 items-center justify-center">
                         <img class="w-15 h-15 rounded-full" :src="'/public/images/'+items.icon"></img>
                     </div>
                     {{ items.name }}
             </div>
-<!-- 
-        <div class="data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-center" data-type="text">
-            <div class="flex text-4xl mb-2 items-center justify-center">
-                <img class="w-15 h-15 rounded-full" src="/public/images/icon_facebook.png"></img>
-            </div>
-            <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Facebook</div>
-        </div>
-
-
-        <div class="data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-center" data-type="spotify">
-            <div class="flex text-4xl mb-2 items-center justify-center">
-                <img class="w-15 h-15 rounded-full" src="/public/images/icon_linkedin.webp"></img>
-            </div>
-            <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Linkedin</div>
-        </div> -->
-
 
         </div>
-    <div class="block w-100 ">
-        <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">Your email</label>
-        <input type="email" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com">
+    <div :class="!class_active? 'hidden': ''" class="block">
+        <div >
+        <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">{{class_active}}</label>
+           <!-- class="bg-gray-50 border w-100 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  -->
+
+        <input 
+        :type="input_active.type" 
+        class="bg-gray-50 border w-100 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            :placeholder="input_active.placeholder.placeholder"
+        v-model="src_url_qr"
+        />
         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p>
         
+        </div>
         
-        <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6" data-i18n="qr_preview">QR code Preview:</h2>
-                
-                <!-- QR Preview -->
-                <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
-                    <!-- ALWAYS WHITE BACKGROUND for QR scanability -->
-                    <div id="qrcode" class="flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
-                        <p class="text-gray-400" data-i18n="qr_preview_here">QR code will be displayed here</p>
-                    </div>
+        <!--class="!input_user?'hidden' : ''"-->
+        <div  class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6" data-i18n="qr_preview">QR - Code Trực Tiếp:</h2>
+            <div class="max-w mx-auto pb-8">
+                <label for="format_img" class="block mb-2.5 text-sm font-medium text-heading">Định dạng QR: </label>
+                <select id="format_img" 
+                style="border-radius: 10px;"
+                v-model="duoi_file" class="block w-full bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs text-fg-disabled">
+                    <option value="png">PNG</option>
+                    <option value="jpg">JPG</option>
+                    <option value="svg">SVG</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            
+
+                <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6 items-center justify-center">
+                    <!-- <img :src="qrData" alt="QR Code" class="qr_code" /> -->
+                    
+                    <QRCodeVue3 
+                    ref="qrRef"
+                    :value="src_url_qr"
+                    :key="src_url_qr"
+            :width="200"
+            :height="200"
+             :download="dlIsActive"
+             downloadButton="hidden-download-btn"
+      :fileExt="duoi_file"
+      :downloadOptions="{ name: 'my-qr', extension: duoi_file }"
+            :image="'/public/images/'+input_active.images"
+            :dotsOptions="{
+/*
+//////////NÂNG CAO THAY ĐỔI /////////
+
+type: square, rounded, extra-rounded, classy, classy-rounded
+color: mã màu
+
+
+
+
+*/
+                type: 'square',  
+                color: '#000000', // Màu xanh lá cây đặc trưng của Vue
+            }" />
+
+          <!--
+          
+          
+          
+          -->
                 </div>
-                
-                <!-- Export Buttons (shown after QR generated) -->
                 <div id="downloadSection" class=" card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center mb-4" data-i18n="export_format">Choose file format:</p>
-                    <div class="grid grid-cols-3 gap-4">
-                        <button onclick="downloadQR('png')" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center mb-4" data-i18n="export_format">Tải về máy của bạn</p>
+                    <div class="flex justify-center items-center">
+                        <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>PNG</span>
-                        </button>
-                        <button onclick="downloadQR('svg')" class="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                            <span>SVG</span>
-                        </button>
-                        <button onclick="downloadQR('pdf')" class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                            <span>PDF</span>
+                            <span>Tải về máy.</span>
                         </button>
                     </div>
                 </div>
@@ -302,5 +293,8 @@ const list_create_qr =[
 }
 .noactive-card{
     border-color: none;
+}
+.hidden-download-btn {
+  display: none !important;
 }
 </style>
