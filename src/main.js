@@ -6,7 +6,11 @@ import { createApp } from 'vue'
 import { onMounted, ref } from 'vue'
 import vi from '../public/language/vi.json'
 import en from '../public/language/en.json'
+import 'preline'
+import 'flowbite'
+import { initFlowbite } from 'flowbite'
 const app = createApp(App);
+
 
 const i18n = createI18n({
   legacy: false,
@@ -22,3 +26,4 @@ const i18n = createI18n({
 app.use(router)
 app.use(i18n)
 app.mount('#app')
+initFlowbite()

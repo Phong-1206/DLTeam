@@ -1,3 +1,8 @@
 @import "tailwindcss";
 @import "flowbite/src/themes/default";
-@source "../node_modules/flowbite";
+@import "preline/variants.css";
+@plugin "daisyui";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "preline/variants.css"; */

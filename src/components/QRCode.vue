@@ -8,12 +8,126 @@ import { inject } from 'vue';
 //import QRCode from "qrcode";
 import QRCodeVue3 from "qrcode-vue3";
 import { nextTick } from "vue";
+import CreateQR from './CreateQR.vue';
+import label from 'daisyui/components/label';
 const test = ref("");
+const qrColor = ref()
+const qrColor_bg = ref()
+const dots_type = ref("square")
+const name_type = ref("Cổ điển")
+const refKey = ref(0);
+const src_url_qr = ref("");
+const tap_onl = ref();
+const size_qr = ref(200); //// Kich Thuoc Qr
+//const file_img = ref();
+//const dinh_dang_qr = ref("png")
+const duoi_file = ref("png");//// Dinh dang anh
+const logo = ref(null)
+const dlIsActive = ref(true); /// Trang thai Tai
+const qrRef = ref(); //// Truyen Tham so
+const image_qr = ref(false)
+const ip_image = ref("false")
+
+
+const edit_dot = ref({
+    type: "square",
+    color: "#000",
+//     gradient: {
+//   //type: "linear",
+//   //rotation: Math.PI / 4,
+//   colorStops: [
+//     { offset: 0, color: "#4facfe" },
+//     { offset: 1, color: "#7366ff" }
+//   ]
+// }
+});
+
+const dots_coban = ref({type: 'square',color: '#000'});
+
+const dots_nangcao =  ref({
+    type: "square",
+    color: "#000",
+})
+
+const backgroundOptions_edit = ref({
+    color: "#fff"
+    });
+
+const tab_active = (active) => {
+    tap_onl.value = active
+};
 onMounted(() => {
     initFlowbite();
-    watch(test, (newValue, oldValue) => {
+    watch(src_url_qr, (newValue, oldValue) => {
         console.log( newValue+ " oldValue: "+ oldValue);
-})
+        refKey.value++;
+   })
+    watch(tap_onl, (newValue) => {
+        if(newValue){
+            edit_dot.value = dots_coban.value
+            console.log("tap co ban")
+        }else {
+            edit_dot.value = dots_nangcao.value
+            console.log("tap nang cao")
+        }
+   })
+   watch(qrColor, (newValue) => {
+        //console.log( newValue+ " oldValue: "+ oldValue);
+        dots_nangcao.value.color = newValue
+        refKey.value++;
+   })
+    watch(qrColor_bg, (newValue) => {
+        backgroundOptions_edit.value.color = newValue
+        refKey.value++;
+   })
+   watch(dots_type, (newValue) => {
+        dots_nangcao.value.type = newValue
+        if(dots_nangcao.value.type == "square"){
+            name_type.value = "Cổ điển"
+        }else if(dots_nangcao.value.type == "dots"){
+            name_type.value = "Hiện đại"
+        }else if(dots_nangcao.value.type == "rounded"){
+            name_type.value = "Bo góc"
+        }else if(dots_nangcao.value.type == "classy"){
+            name_type.value = "Giọt nước"
+        }else if(dots_nangcao.value.type == "classy-rounded"){
+            name_type.value = "Giọt bo tròn"
+        }else {
+            name_type.value = "Bo tròn mạnh"
+        }
+        console.log()
+        refKey.value++;
+   })
+   watch(size_qr, (newValue) => {
+        size_qr.value = newValue
+        refKey.value++;
+    })
+//
+    watch(ip_image, (newValue) => {
+        //image_qr.value = newValue
+        
+        //refKey.value++;
+        if (newValue == "false"){
+            image_qr.value = false
+        }else{
+            image_qr.value = input_active.value.images
+        }
+        refKey.value++;
+    })
+
+    watch(logo, (newValue) => {
+        //file_img.value = newValue
+        image_qr.value = newValue
+        refKey.value++;
+        //console.log("File: "+newValue)
+    })
+
+    // watch(image_qr, (newValue) => {
+    //     //file_img.value = newValue
+    //     //image_qr.value = newValue
+    //     console.log("Url: "+newValue)
+    // })
+
 });
 const list_create_qr = inject('list_qr');
 
@@ -23,27 +137,82 @@ const input_active = ref({
     placeholder: "",
     images: ""
 });
+
+// watch(refKey,(newValue) => {
+//     console.log(newValue);
+// })
+
+const file_img = (e) =>{
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+  logo.value = event.target.result; // Base64
+  };
+  reader.readAsDataURL(file);
+
+};
+
 const test_click = (items) => {
     class_active.value = items.name;
     input_active.value.type = items.type[0];
     input_active.value.placeholder = items.data[0][0];
-    input_active.value.images = items.icon;
+    input_active.value.images = '/public/images/'+items.icon;
     console.log(items.data[0][0]);
+    refKey.value++;
 
 };
-const qrRef = ref();
-const src_url_qr = ref("");
-const size_qr = 200;
-const duoi_file = ref("png");
-const dlIsActive = ref(true);
+
+const change_type = (items) => {
+    dots_nangcao.value.type = items
+    dots_type.value = items
+    ///console.log(items);
+};
+
 const DownloadPNG = async () => {
     // dlIsActive.value = !dlIsActive.value;
     await nextTick();
     const btn = qrRef.value?.$el.querySelector(".hidden-download-btn");
   if (!btn) return alert("Đã xảy ra lỗi trong quá trình tạo QR, bạn có thể báo lại cho admin nhé!");
 
-  btn.click(); 
+  btn.click();
 };
+
+const list_type_qr = ref([
+    {
+        type:"square",
+        name_type: "Cổ điển",
+        url_img: "type_co_dien"
+    },
+    {
+        type:"dots",
+        name_type: "Hiện đại",
+        url_img: "type_hien_dai"
+    },
+    {
+        type:"rounded",
+        name_type: "Bo góc",
+        url_img: "type_bo_goc"
+    },
+    {
+        type:"classy",
+        name_type: "Giọt nước",
+        url_img: "type_giot_nuoc"
+    },
+    {
+        type:"classy-rounded",
+        name_type: "Giọt bo tròn",
+        url_img: "type_giot_bo_tron"
+    },
+    {
+        type:"extra-rounded",
+        name_type: "Bo tròn mạnh",
+        url_img: "type_bo_tron_manh"
+    }
+])
+
+
 </script>
 <template>
 <div class="bg-white py-12 sm:py-12">
@@ -56,34 +225,24 @@ const DownloadPNG = async () => {
         Tạo mã QR miễn phí, nhanh và an toàn với DLTeam – hỗ trợ liên kết, văn bản, Wi-Fi, danh thiếp và nhiều hơn nữa.
       </p>
     </div>
+    <div class="mt-6 w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <ul class=" text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+            <li class="w-full">
+                <button @click="tab_active(true)" id="coban-tab" data-tabs-target="#coban" type="button" role="tab" aria-controls="coban" aria-selected="true" class="inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Cơ bản</button>
+            </li>
+            <li class="w-full">
+                <button @click="tab_active(false)" id="nangcao-tab" data-tabs-target="#nangcao" type="button" role="tab" aria-controls="nangcao" aria-selected="false" class="inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Nâng cao</button>
+            </li>
+        </ul>
+    <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
     
-<div class="mt-6 w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-    <!-- <div class="sm:hidden">
-        <label for="tabs" class="sr-only">Select tab</label>
-        <select id="tabs" class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option>Cơ bản</option>
-            <option>Nâng cao</option>
-        </select>
-    </div> -->
-    <ul class=" text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
-        <li class="w-full">
-            <button id="stats-tab" data-tabs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="true" class="inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Cơ bản</button>
-        </li>
-        <li class="w-full">
-            <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false" class="inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Nâng cao</button>
-        </li>
-    </ul>
-<div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
-    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6" id="dataTypeGrid">
-
-
-
-
-            <div 
-            v-for="items in list_create_qr" 
+    
+    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="coban" role="tabpanel" aria-labelledby="coban-tab">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+            <div
+            v-for="items in list_create_qr"
             :key="items.name"
-            class="data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-sm font-medium text-gray-700 text-center dark:text-gray-300 hover:bg-indigo-600 hover:text-white" 
+            class="data-card card-bg p-4 rounded-xl border-2 border-gray-200 text-sm font-medium text-gray-700 text-center dark:text-gray-300 hover:bg-indigo-600 hover:text-white"
             :class="class_active == items.name ? 'active-card':'noactive-card'"
             @click="test_click(items)">
                     <div class="flex text-4xl mb-2 items-center justify-center">
@@ -91,201 +250,330 @@ const DownloadPNG = async () => {
                     </div>
                     {{ items.name }}
             </div>
-
         </div>
-    <div :class="!class_active? 'hidden': ''" class="block">
-        <div >
+        <!--:class="!class_active? 'hidden': ''"-->
+    <div class="block">
+        <div>
         <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">{{class_active}}</label>
-           <!-- class="bg-gray-50 border w-100 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  -->
-
-        <input 
-        :type="input_active.type" 
-        class="bg-gray-50 border w-100 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="input_active.placeholder.placeholder"
+        <input
+        :type="input_active.type"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            :placeholder="input_active.placeholder.placeholder" placeholder="Nhập tại đây"
         v-model="src_url_qr"
         />
         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p>
-        
         </div>
-        
-        <!--class="!input_user?'hidden' : ''"-->
-        <div  class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6" data-i18n="qr_preview">QR - Code Trực Tiếp:</h2>
-            <div class="max-w mx-auto pb-8">
-                <label for="format_img" class="block mb-2.5 text-sm font-medium text-heading">Định dạng QR: </label>
-                <select id="format_img" 
-                style="border-radius: 10px;"
-                v-model="duoi_file" class="block w-full bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs text-fg-disabled">
-                    <option value="png">PNG</option>
-                    <option value="jpg">JPG</option>
-                    <option value="svg">SVG</option>
-                    <option value="pdf">PDF</option>
-                </select>
-            </div>
-            
-
-                <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6 items-center justify-center">
-                    <!-- <img :src="qrData" alt="QR Code" class="qr_code" /> -->
-                    
-                    <QRCodeVue3 
-                    ref="qrRef"
-                    :value="src_url_qr"
-                    :key="src_url_qr"
-            :width="200"
-            :height="200"
-             :download="dlIsActive"
-             downloadButton="hidden-download-btn"
-      :fileExt="duoi_file"
-      :downloadOptions="{ name: 'my-qr', extension: duoi_file }"
-            :image="'/public/images/'+input_active.images"
-            :dotsOptions="{
-/*
-//////////NÂNG CAO THAY ĐỔI /////////
-
-type: square, rounded, extra-rounded, classy, classy-rounded
-color: mã màu
-
-
-
-
-*/
-                type: 'square',  
-                color: '#000000', // Màu xanh lá cây đặc trưng của Vue
-            }" />
-
-          <!--
-          
-          
-          
-          -->
-                </div>
-                <div id="downloadSection" class=" card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center mb-4" data-i18n="export_format">Tải về máy của bạn</p>
-                    <div class="flex justify-center items-center">
-                        <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>Tải về máy.</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-    </div>
-
-
-
-    </div>
-
-
-        <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel" aria-labelledby="about-tab">
-            
-            <div id="tab-customize" class="tab-content">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6" data-i18n="customize_qr">Customize QR appearance</h2>
+        <!-- <CreateQR :key_qr="refKey" :value_qr="src_url_qr" :image_qr="input_active.images"></CreateQR> -->
+         <!-- <QRCodeVue3
+                ref="qrRef"
+                :value="src_url_qr"
+                :key="refKey"
+                :width="size_qr"
+                :height="size_qr"
+                :download="dlIsActive"
+                downloadButton="hidden-download-btn"
+                :fileExt="duoi_file"
+                :downloadOptions="{ name: 'dlteam-qr', extension: duoi_file }"
+                :image="false"
+                :dotsOptions="" /> -->
+        <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
+            <div class="flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
                 
-                <div class="space-y-6">
-                    <!-- QR Style & Colors -->
-                    <div class="space-y-6">
-                        <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                <span>🎨</span>
-                                <span data-i18n="qr_colors">QR Code Colors:</span>
-                            </p>
-                            
-                            <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_color">QR Color:</label>
-                                    <input type="color" id="qrColorDark" value="#000000" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
-                                </div>
-                                <div>
-                                    <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="bg_color">Background Color:</label>
-                                    <input type="color" id="qrColorLight" value="#ffffff" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" data-i18n="color_warning">⚠️ Note: Use high contrast colors (black/white) for best scanability. Light or similar colors may reduce scanning ability.</p>
-                        </div>
-
-                        <!-- QR Size -->
-                        <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                <span>📏</span>
-                                <span data-i18n="qr_size">QR Code Size:</span>
-                            </p>
-                            
-                            <div class="space-y-3">
-                                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_size_input">Enter size (px):</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="number" id="qrSize" min="100" max="1000" value="300" class="flex-1 px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all input-bg">
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">px</span>
-                                </div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400" data-i18n="qr_size_hint">Recommended: 200-500px for web, 300-800px for print</p>
-                            </div>
-                        </div>
-
-                        <!-- Center Customization -->
-                        <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4" data-i18n="customize_center">Customize center:</p>
-                            
-                            <div class="space-y-3">
-                                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
-                                    <input type="radio" name="centerOption" value="logo" class="mr-3 w-4 h-4 text-indigo-600">
-                                    <div class="flex-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="add_logo">📷 Add Logo</span>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" data-i18n="add_logo_hint">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
-                                    </div>
-                                </label>
-                                <input type="file" id="logoFile" accept="image/*" class="w-full px-4 py-3 border-2 input-bg rounded-xl transition-all" disabled="">
-
-                                <div id="logoPreview" class="hidden mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"></div>
-                                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
-                                    <input type="radio" name="centerOption" value="text" class="mr-3 w-4 h-4 text-indigo-600">
-                                    <div class="flex-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="add_text">✏️ Add Text</span>
-                                    </div>
-                                </label>
-                                <input type="text" id="centerText" data-i18n-placeholder="enter_text" class="w-full px-4 py-3 border-2 input-bg rounded-xl transition-all mb-2" disabled="" placeholder="Enter text...">
-                                <div class="flex items-center gap-3">
-                                    <label class="text-sm text-gray-600 dark:text-gray-400 font-medium" data-i18n="text_color">Text color:</label>
-                                    <input type="color" id="centerTextColor" value="#000000" class="h-10 w-24 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer" disabled="">
-                                </div>
-
-                                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
-                                    <input type="radio" name="centerOption" value="none" class="mr-3 w-4 h-4 text-indigo-600" checked="">
-                                    <div class="flex-1">
-                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="none">None</span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Campaign Tracking -->
-                        <div id="campaignSection" class="card-bg rounded-xl p-4 md:p-6 border border-gray-200">
-                            <label class="flex items-center mb-4 cursor-pointer">
-                                <input type="checkbox" id="enableCampaign" class="mr-3 w-4 h-4 text-indigo-600 rounded">
-                                <div>
-                                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                                        <span>📊</span>
-                                        <span data-i18n="campaign_title">Google Campaign Tracking</span>
-                                    </span>
-                                    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1" data-i18n="campaign_desc">Add UTM parameters</p>
-                                </div>
-                            </label>
-                            <div id="campaignFields" class="space-y-3 hidden">
-                                <input type="text" id="utmSource" placeholder="📌 Campaign Source (utm_source)" class="w-full px-4 py-3 border-2 input-bg rounded-xl">
-                                <input type="text" id="utmMedium" placeholder="🔗 Campaign Medium (utm_medium)" class="w-full px-4 py-3 border-2 input-bg rounded-xl">
-                                <input type="text" id="utmCampaign" placeholder="🎯 Campaign Name (utm_campaign)" class="w-full px-4 py-3 border-2 input-bg rounded-xl">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
+            <div v-else>
+                <QRCodeVue3 
+                            ref="qrRef"
+                            :value="src_url_qr"
+                            :key="refKey"
+                            :width="size_qr"
+                            :height="size_qr"
+                            :download="dlIsActive"
+                            downloadButton="hidden-download-btn"
+                            :fileExt="duoi_file"
+                            :downloadOptions="{ name: 'dlteam-qr', extension: duoi_file }"
+                            :image="false"
+                            :dotsOptions="edit_dot"
+                            />
+            </div>
             </div>
 
+        </div>
+        <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
+        <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span>Lưu QR Code</span>
+        </button>
+        </div>
 
+
+    </div>
+
+<!--   -->
+
+    </div>
+
+
+<div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="nangcao" role="tabpanel" aria-labelledby="nangcao-tab">
+<h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6">Sáng tạo QR Code</h2>
+
+<div class="space-y-6">
+    <div class="join join-vertical bg-base-100">
+        <div class="collapse collapse-arrow join-item border-base-300 border">
+            <input type="radio" name="my-accordion-4" checked="checked" />
+            <div class="collapse-title font-semibold">Lựa chọn phong cách QR Code của bạn?</div>
+            <div class="collapse-content text-sm">
+            <p class="mb-2 text-body">DLTeam hỗ trợ nhiều kiểu QR Code khác nhau để bạn lựa chọn theo đúng phong cách và nhu cầu sử dụng. Từ kiểu truyền thống đến hiện đại, tất cả đều được tối ưu để dễ quét và phù hợp cho mọi tình huống như chia sẻ thông tin, liên kết, Wi-Fi hay cửa hàng.</p>
+            <p class="mb-2 text-body">Bạn có thể chọn Cổ điển để có độ tương thích cao, Hiện đại, Bo góc cân bằng và thân thiện, Giọt nước hoặc Giọt bo tròn mang cảm giác sang trọng, hoặc Bo tròn mạnh dành cho phong cách trẻ trung và mềm mại. DLTeam mang đến sự linh hoạt để bạn tạo mã QR đúng chất của riêng mình.</p>
+            <div class="grid grid-cols-3 grid-rows-2 gap-3">
+                <div v-for="items in list_type_qr" class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" :src="'/public/images/img_qr/'+items.url_img+'.png'"  :alt="'DLTeam QR Code '+ items.name_type" :width="200" :height="200"/></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ items.name_type }}</p>
+                </div>
+
+                <!-- <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/type_hien_dai.png"  alt="DLTeam QR Code Hiện Đại" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Cổ điển</p>
+                </div> -->
+           </div>
+            <div class="text-center mt-3">
+            <el-dropdown class="inline-block">
+                <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-blue-600 hover:bg-gray-50">
+                {{ name_type }}
+                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+                    <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+                </svg>
+                </button>
+                <el-menu anchor="bottom end" popover class="m-0 w-56 origin-top-right rounded-md bg-white p-0 shadow-lg  outline-black/5 transition [--anchor-gap:theme(spacing.2)] [transition-behavior:allow-discrete] data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                <div class="py-1">
+
+                    <a v-for="items in list_type_qr" @click="change_type(items.type)" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">{{ items.name_type }}</a>
+                    <!--
+                    <a @click="change_type('square')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Cổ điển</a>
+                    <a @click="change_type('dots')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Hiện đại</a>
+                    <a @click="change_type('rounded')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Bo góc</a>
+                    <a @click="change_type('classy')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Giọt nước</a>
+                    <a @click="change_type('classy-rounded')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Giọt bo tròn</a>
+                    <a @click="change_type('extra-rounded')" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-none">Bo tròn mạnh</a>
+                    -->
+                </div>
+                </el-menu>
+            </el-dropdown>
+            </div>
+            </div>
+        </div>
+        <div class="collapse collapse-arrow join-item border-base-300 border">
+            <input type="radio" name="my-accordion-4" />
+            <div class="collapse-title font-semibold">Tùy chỉnh màu sắc QR Code</div>
+            <div class="collapse-content text-sm">
+            <p class="mb-2 text-body">DLTeam cho phép bạn tùy chỉnh màu sắc QR Code để phù hợp với thương hiệu, sở thích hoặc mục đích sử dụng của bạn. Bạn có thể thay đổi màu chính của mã QR chỉ với một thao tác đơn giản, giúp thiết kế trở nên nổi bật hơn và phù hợp với phong cách cá nhân.</p>
+            
+            <div class="grid grid-cols-2 grid-rows-1 gap-3">
+                <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/color_qr.png"  alt="DLTeam QR Code Cổ Điển Màu Sắc QR" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Màu QR</p>
+                </div>
+                <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/color_bg_qr.png"  alt="DLTeam QR Code Cổ Điển Màu Nền QR" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Màu Nền QR</p>
+                </div>
+            </div>
+                
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_color">QR Color:</label>
+                <input type="color" v-model="qrColor" value="#000000" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
+                </div>
+                <div>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="bg_color">Background Color:</label>
+                <input type="color" v-model="qrColor_bg" value="#ffffff" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Chú ý: Nên ưu tiên chọn màu (đen/trắng), vì độ tương phản cao giúp camera quét dễ dàng nhận dạng.</p>
+            
+            </div>
+            </div>
+        </div>
+        <div class="collapse collapse-arrow join-item border-base-300 border">
+            <input type="radio" name="my-accordion-4" />
+            <div class="collapse-title font-semibold">Thêm logo hoặc hình ảnh vào QR Code</div>
+            <div class="collapse-content text-sm">
+            <p class="mb-2 text-body">DLTeam hỗ trợ bạn thêm hình ảnh hoặc logo vào giữa QR Code để tăng độ nhận diện và tạo dấu ấn riêng. Bạn có thể tải ảnh trực tiếp từ thiết bị của mình, dễ dàng chèn vào QR chỉ với vài thao tác.</p> 
+            <p class="mb-2 text-body">Ngoài ra, DLTeam cũng cho phép bạn sử dụng logo sẵn có của các nền tảng phổ biến như Facebook, YouTube, TikTok, Zalo… giúp mã QR của bạn trông chuyên nghiệp và phù hợp hơn với nội dung liên kết. Tất cả đều được tối ưu để giữ khả năng quét ổn định và rõ ràng.</p>
+            <!-- <ul class="ps-5 text-body list-disc">
+                <li><a href="https://flowbite.com/pro/" class="text-fg-brand hover:underline">Flowbite Pro</a></li>
+                <li><a href="https://tailwindui.com/" rel="nofollow" class="text-fg-brand hover:underline">Tailwind UI</a></li>
+            </ul> -->
+            <div class="grid grid-cols-3 grid-rows-1 gap-3">
+                <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/type_co_dien.png"  alt="DLTeam QR Code Cổ Điển Mặc Định" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Mặc định</p>
+                </div>
+                <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/logo_media.png"  alt="DLTeam QR Code Logo Mạng Xã Hội" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Logo mạng xã hội</p>
+                </div>
+                <div class="card sm:max-w-sm">
+                    <figure><img class="rounded-md" src="/public/images/img_qr/logo_add.png"  alt="DLTeam QR Code Thêm Từ Thư Viện" /></figure>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Ảnh thư viện</p>
+                </div>
+            </div>
+            <div class="space-y-3 mt-3">
+                
+                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
+                <input type="radio" name="ip_image" v-model="ip_image" value="false" class="mr-3 w-4 h-4 text-indigo-600">
+                <div class="flex-1">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Mặc định</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                </div>
+                </label>
+
+                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
+                <input type="radio"  name="ip_image" v-model="ip_image" value="logo_media" class="mr-3 w-4 h-4 text-indigo-600">
+                <div class="flex-1">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Thêm Logo</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                </div>
+                </label>
+                
+                <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
+                <input type="radio" name="ip_image" v-model="ip_image" value="true" class="mr-3 w-4 h-4 text-indigo-600">
+                <div class="flex-1">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Thêm ảnh thư viện</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                </div>
+                </label>
+
+                <input v-if="ip_image == 'true'" type="file" @change="file_img" class="w-full px-4 py-3 border-2 input-bg rounded-xl transition-all">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Note: Use high contrast colors (black/white) for best scanability. Light or similar colors may reduce scanning ability.</p>
+            
+            </div>
+        </div>
+        <div class="collapse collapse-arrow join-item border-base-300 border">
+            <input type="radio" name="my-accordion-4" />
+            <div class="collapse-title font-semibold">Tùy chỉnh kích thước QR Code</div>
+            <div class="collapse-content text-sm">
+            <p class="mb-2 text-body">DLTeam cho phép bạn tùy chỉnh kích thước QR Code theo nhu cầu sử dụng. Bạn có thể dễ dàng tăng hoặc giảm kích thước để phù hợp với mục đích in ấn, chia sẻ online hoặc sử dụng trên các tài liệu thiết kế.</p> 
+            <div class="space-y-3">
+                <label for="visitors" class="block mb-2.5 text-sm font-medium text-heading">Kích thước:</label>
+                    <input type="number" v-model="size_qr" class="bg-neutral-secondary-medium border border-default-medium rounded-md text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-2.5 py-2 shadow-xs placeholder:text-body" placeholder="200px, 300px, 400px,..." required />
+            
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Chú ý: Bạn nên chọn 200px - 800px, dựa trên nhu cầu sử dụng của bạn.</p>
+            </div>
+        </div>
+        <div class="collapse collapse-arrow join-item border-base-300 border">
+            <input type="radio" name="my-accordion-4" />
+            <div class="collapse-title font-semibold">Định dạng tải về QR Code</div>
+            <div class="collapse-content text-sm">
+            <p class="mb-2 text-body">DLTeam có nhiều định dạng tải xuống phú hợp với mọi công việc, nhu cầu sử dụng. Bạn dễ dàng tải xuống đúng định dang của mình chỉ với một cú nhấp chuột. </p> 
+            
+            <div class="space-y-3">
+                <div class="flex items-center">
+                    <label for="duoi_file" class="block mb-2.5 text-sm font-medium text-heading">Định dạng</label>
+                    <select id="duoi_file" v-model="duoi_file" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium rounded-md text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                        <option value="png">PNG</option>
+                        <option value="jpeg">JPEG</option>
+                        <option value="webp">WEBP</option>
+                        <option value="svg">SVG</option>
+                    </select>
+                </div>
+            </div>  
+            </div>
+        </div>
+        </div>
+        <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
+            <div id="qrcode" class="flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
+                <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
+                <div v-else>
+                    <QRCodeVue3 
+                                ref="qrRef"
+                                :value="src_url_qr"
+                                :key="refKey"
+                                :width="size_qr"
+                                :height="size_qr"
+                                :download="dlIsActive"
+                                downloadButton="hidden-download-btn"
+                                :fileExt="duoi_file"
+                                :downloadOptions="{ name: 'dlteam-qr', extension: duoi_file }"
+                                :image="image_qr"
+                                :dotsOptions="edit_dot" 
+                                :backgroundOptions="backgroundOptions_edit"
+                                />
+                </div>
+            </div>
+        </div>
+        <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
+            <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-600  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Lưu QR Code</span>
+            </button>
+        </div>
+    </div>
+
+
+
+<!--
+    <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200">
+        <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
+            <span>🎨</span>
+            <span data-i18n="qr_colors">QR Code Colors:</span>
+        </p>
+        Chọn các tính năng củ qr code
+
+        <div>
+            <input type="range" min="200" max="1000" v-model="size_qr"/>
+<select v-model="dots_type">
+  <option value="square">Vuông</option>
+  <option value="dots">Chấm tròn</option>
+  <option value="rounded">Tròn bo nhẹ</option>
+  <option value="classy">classy</option>
+  <option value="classy-rounded">classy-rounded</option>
+  <option value="extra-rounded">Bo tròn cực mạnh</option>
+</select>
+
+<input type="file" @change="file_img" placeholder="Files" >
 
         </div>
 
+
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_color">QR Color:</label>
+                <input type="color" v-model="qrColor" value="#000000" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
+            </div>
+            <div>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="bg_color">Background Color:</label>
+                <input type="color" v-model="qrColor_bg" value="#ffffff" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
+            </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" data-i18n="color_warning">⚠️ Note: Use high contrast colors (black/white) for best scanability. Light or similar colors may reduce scanning ability.</p>
+        <div width="500" height="500">
+        <QRCodeVue3
+        :value="src_url_qr"
+        :key="refKey"
+        :width="size_qr"
+        :height="size_qr"
+        :download="dlIsActive"
+        downloadButton="hidden-download-btn2"
+        :fileExt="duoi_file"
+        :downloadOptions="{ name: 'dlteam-qr', extension: duoi_file }"
+        :image="input_active.images"
+        :dotsOptions="edit_dot"
+        :background-options="backgroundOptions" />
+        </div>
     </div>
+-->
+
+
 </div>
-  </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
 </template>
 <style lang="css">
 .active-card{
