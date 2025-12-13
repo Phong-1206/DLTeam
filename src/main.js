@@ -9,8 +9,10 @@ import en from '../public/language/en.json'
 import 'preline'
 import 'flowbite'
 import { initFlowbite } from 'flowbite'
-const app = createApp(App);
+//import VOnboardingPlugin from "v-onboarding"
+import "v-onboarding/dist/style.css";
 
+const app = createApp(App);
 
 const i18n = createI18n({
   legacy: false,
@@ -25,5 +27,7 @@ const i18n = createI18n({
 
 app.use(router)
 app.use(i18n)
+//app.use(VOnboardingPlugin)
+//app.use(VOnboardingPlugin)
 app.mount('#app')
 initFlowbite()

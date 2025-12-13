@@ -10,6 +10,9 @@ import QRCodeVue3 from "qrcode-vue3";
 import { nextTick } from "vue";
 import CreateQR from './CreateQR.vue';
 import label from 'daisyui/components/label';
+import { VOnboardingWrapper } from "v-onboarding";
+import "v-onboarding/dist/style.css";
+
 const test = ref("");
 const qrColor = ref()
 const qrColor_bg = ref()
@@ -58,6 +61,7 @@ const tab_active = (active) => {
 };
 onMounted(() => {
     initFlowbite();
+    wrapper.value.start();
     watch(src_url_qr, (newValue, oldValue) => {
         console.log( newValue+ " oldValue: "+ oldValue);
         refKey.value++;
@@ -65,10 +69,11 @@ onMounted(() => {
     watch(tap_onl, (newValue) => {
         if(newValue){
             edit_dot.value = dots_coban.value
-            console.log("tap co ban")
+            //console.log("tap co ban")
         }else {
             edit_dot.value = dots_nangcao.value
-            console.log("tap nang cao")
+            wrapper2.value.start();
+            //console.log("tap nang cao")
         }
    })
    watch(qrColor, (newValue) => {
@@ -213,6 +218,119 @@ const list_type_qr = ref([
 ])
 
 
+
+
+const wrapper = ref(null);
+const currentStep = ref(0);
+
+const wrapper2 = ref(null);
+const currentStep2 = ref(0);
+const onboardingOptions = {
+  labels: {
+    next: "Tiếp tục",
+    previous: "Quay lại",
+    finish: "Hoàn tất",
+    skip: "Bỏ qua"
+  }
+}
+const steps = [
+  {
+    attachTo: { element: '.step_coban_1', on: 'bottom' },
+    content: {
+      title: 'Bước 1',
+      description: 'Đây là trang cơ bản, nơi bạn có thể tạo QR Code đơn giản, nhanh chóng.'
+    }
+  },
+  {
+    attachTo: { element: '.step_coban_2', on: 'bottom' },
+    content: {
+      title: 'Bước 2',
+      description: 'Đây là trang nâng cao, bạn có thể tùy chỉnh QR Code theo phong cách cá nhân của bạn.'
+    }
+  },
+  {
+    attachTo: { element: '.step_coban_3', on: 'top' },
+    content: {
+      title: 'Bước 3',
+      description: 'Đây là bước bạn chọn kiểu dữ liệu bạn nhập vào. '
+    }
+  },
+  {
+    attachTo: { element: '.step_coban_4', on: 'top' },
+    content: {
+      title: 'Bước 4',
+      description: 'Bạn dữ liệu cần tạo ra QR Code tại đây'
+    }
+  },
+  {
+    attachTo: { element: '.step_coban_5', on: 'top' },
+    content: {
+      title: 'Bước 5',
+      description: 'QR Code bạn tạo sẽ được hiện trực tiếp tại đây.'
+    }
+  },
+  {
+    attachTo: { element: '.step_coban_6', on: 'top' },
+    content: {
+      title: 'Bước 6',
+      description: 'Đây là nút lưu QR Code bạn tạo về thư viện điện thoại.'
+    }
+  }
+];
+
+const steps2 = [
+  {
+    attachTo: { element: '.step_nangcao_1', on: 'bottom' },
+    content: {
+      title: 'Bước 1',
+      description: 'Đây là bước thay đổi kiểu QR Code, bạn hẫy lựa chọn kiểu QR phù hợp với phong cách.'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_2', on: 'top' },
+    content: {
+      title: 'Bước 2',
+      description: 'Đây là bước thay đổi màu sắc QR Code, bạn có thể thay đổi màu của QR và màu nền của mình.'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_3', on: 'top' },
+    content: {
+      title: 'Bước 3',
+      description: 'Đây là bước thêm ảnh, logo QR Code, bạn có thể thêm ảnh của QR tạo cá tính, cá nhân hóa chủ sở hữu QR.'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_4', on: 'top' },
+    content: {
+      title: 'Bước 4',
+      description: 'Đây là bước thay đổi kích thước QR Code, lựa chọn kích thước phù hợp với công việc bạn sử dụng QR.'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_5', on: 'top' },
+    content: {
+      title: 'Bước 5',
+      description: 'Đây là bước thay đổi định dạng file QR Code, DLTeam hỗ trợ các định dạng phổ biến bạn có thể sử dụng ngay lập tức'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_6', on: 'top' },
+    content: {
+      title: 'Bước 6',
+      description: 'QR Code bạn tạo sẽ được hiện trực tiếp tại đây.'
+    }
+  },
+  {
+    attachTo: { element: '.step_nangcao_7', on: 'top' },
+    content: {
+      title: 'Bước 7',
+      description: 'Đây là nút lưu QR Code bạn tạo về thư viện điện thoại.'
+    }
+  }
+];
+
+
 </script>
 <template>
 <div class="bg-white py-12 sm:py-12">
@@ -228,17 +346,17 @@ const list_type_qr = ref([
     <div class="mt-6 w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <ul class=" text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
             <li class="w-full">
-                <button @click="tab_active(true)" id="coban-tab" data-tabs-target="#coban" type="button" role="tab" aria-controls="coban" aria-selected="true" class="inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Cơ bản</button>
+                <button @click="tab_active(true)" id="coban-tab" data-tabs-target="#coban" type="button" role="tab" aria-controls="coban" aria-selected="true" class="step_coban_1 inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Cơ bản</button>
             </li>
             <li class="w-full">
-                <button @click="tab_active(false)" id="nangcao-tab" data-tabs-target="#nangcao" type="button" role="tab" aria-controls="nangcao" aria-selected="false" class="inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Nâng cao</button>
+                <button @click="tab_active(false)" id="nangcao-tab" data-tabs-target="#nangcao" type="button" role="tab" aria-controls="nangcao" aria-selected="false" class="step_coban_2 inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Nâng cao</button>
             </li>
         </ul>
     <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
     
     
     <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="coban" role="tabpanel" aria-labelledby="coban-tab">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+        <div class="step_coban_3 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
             <div
             v-for="items in list_create_qr"
             :key="items.name"
@@ -257,7 +375,7 @@ const list_type_qr = ref([
         <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">{{class_active}}</label>
         <input
         :type="input_active.type"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="step_coban_4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             :placeholder="input_active.placeholder.placeholder" placeholder="Nhập tại đây"
         v-model="src_url_qr"
         />
@@ -277,7 +395,7 @@ const list_type_qr = ref([
                 :image="false"
                 :dotsOptions="" /> -->
         <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
-            <div class="flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
+            <div class="step_coban_5 flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
                 
             <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
             <div v-else>
@@ -299,7 +417,7 @@ const list_type_qr = ref([
 
         </div>
         <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
-        <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
+        <button @click="DownloadPNG" class="step_coban_6 w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             <span>Lưu QR Code</span>
         </button>
@@ -319,7 +437,7 @@ const list_type_qr = ref([
 <div class="space-y-6">
     <div class="join join-vertical bg-base-100">
         <div class="collapse collapse-arrow join-item border-base-300 border">
-            <input type="radio" name="my-accordion-4" checked="checked" />
+            <input class="step_nangcao_1" type="radio" name="my-accordion-4" checked="checked" />
             <div class="collapse-title font-semibold">Lựa chọn phong cách QR Code của bạn?</div>
             <div class="collapse-content text-sm">
             <p class="mb-2 text-body">DLTeam hỗ trợ nhiều kiểu QR Code khác nhau để bạn lựa chọn theo đúng phong cách và nhu cầu sử dụng. Từ kiểu truyền thống đến hiện đại, tất cả đều được tối ưu để dễ quét và phù hợp cho mọi tình huống như chia sẻ thông tin, liên kết, Wi-Fi hay cửa hàng.</p>
@@ -361,7 +479,7 @@ const list_type_qr = ref([
             </div>
             </div>
         </div>
-        <div class="collapse collapse-arrow join-item border-base-300 border">
+        <div class="step_nangcao_2 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div class="collapse-title font-semibold">Tùy chỉnh màu sắc QR Code</div>
             <div class="collapse-content text-sm">
@@ -393,7 +511,7 @@ const list_type_qr = ref([
             </div>
         </div>
         <div class="collapse collapse-arrow join-item border-base-300 border">
-            <input type="radio" name="my-accordion-4" />
+            <input class="step_nangcao_3" type="radio" name="my-accordion-4" />
             <div class="collapse-title font-semibold">Thêm logo hoặc hình ảnh vào QR Code</div>
             <div class="collapse-content text-sm">
             <p class="mb-2 text-body">DLTeam hỗ trợ bạn thêm hình ảnh hoặc logo vào giữa QR Code để tăng độ nhận diện và tạo dấu ấn riêng. Bạn có thể tải ảnh trực tiếp từ thiết bị của mình, dễ dàng chèn vào QR chỉ với vài thao tác.</p> 
@@ -447,7 +565,7 @@ const list_type_qr = ref([
             
             </div>
         </div>
-        <div class="collapse collapse-arrow join-item border-base-300 border">
+        <div class="step_nangcao_4 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div class="collapse-title font-semibold">Tùy chỉnh kích thước QR Code</div>
             <div class="collapse-content text-sm">
@@ -460,7 +578,7 @@ const list_type_qr = ref([
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Chú ý: Bạn nên chọn 200px - 800px, dựa trên nhu cầu sử dụng của bạn.</p>
             </div>
         </div>
-        <div class="collapse collapse-arrow join-item border-base-300 border">
+        <div class="step_nangcao_5 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
             <div class="collapse-title font-semibold">Định dạng tải về QR Code</div>
             <div class="collapse-content text-sm">
@@ -481,7 +599,7 @@ const list_type_qr = ref([
         </div>
         </div>
         <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
-            <div id="qrcode" class="flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
+            <div id="qrcode" class="step_nangcao_6 flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
                 <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
                 <div v-else>
                     <QRCodeVue3 
@@ -502,7 +620,7 @@ const list_type_qr = ref([
             </div>
         </div>
         <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
-            <button @click="DownloadPNG" class="w-max p-20 bg-gradient-to-r bg-blue-600  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
+            <button @click="DownloadPNG" class="step_nangcao_7 w-max p-20 bg-gradient-to-r bg-blue-600  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span>Lưu QR Code</span>
             </button>
@@ -572,8 +690,18 @@ const list_type_qr = ref([
 </div>
 </div>
 
-
-
+  <VOnboardingWrapper
+  v-model:step="currentStep"
+  :steps="steps"
+  :options="onboardingOptions"
+  ref="wrapper"
+/>
+<VOnboardingWrapper
+  v-model:step="currentStep2"
+  :steps="steps2"
+  :options="onboardingOptions"
+  ref="wrapper2"
+/>
 </template>
 <style lang="css">
 .active-card{

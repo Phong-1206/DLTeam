@@ -4,7 +4,7 @@ import { ref, reactive, computed } from 'vue';
 import { watch } from 'vue';
 import { onMounted } from 'vue';
 import { provide } from 'vue';
-
+import { VOnboardingWrapper } from "v-onboarding";
 /////// SET NGÔN NGỮ /////
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -170,6 +170,7 @@ onMounted(() => {
 
 <template>
   <RouterView />
+  <VOnboardingWrapper />
 </template>
 
 <script>
