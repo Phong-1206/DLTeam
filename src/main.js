@@ -11,7 +11,8 @@ import 'flowbite'
 import { initFlowbite } from 'flowbite'
 //import VOnboardingPlugin from "v-onboarding"
 import "v-onboarding/dist/style.css";
-
+import { createHead } from '@vueuse/head'
+const head = createHead()
 const app = createApp(App);
 
 const i18n = createI18n({
@@ -27,6 +28,7 @@ const i18n = createI18n({
 
 app.use(router)
 app.use(i18n)
+app.use(head)
 //app.use(VOnboardingPlugin)
 //app.use(VOnboardingPlugin)
 app.mount('#app')

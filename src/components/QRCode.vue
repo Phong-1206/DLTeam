@@ -12,7 +12,6 @@ import CreateQR from './CreateQR.vue';
 import label from 'daisyui/components/label';
 import { VOnboardingWrapper } from "v-onboarding";
 import "v-onboarding/dist/style.css";
-
 const test = ref("");
 const qrColor = ref()
 const qrColor_bg = ref()
@@ -280,51 +279,58 @@ const steps = [
 
 const steps2 = [
   {
-    attachTo: { element: '.step_nangcao_1', on: 'bottom' },
+    attachTo: { element: '.step_coban_2', on: 'bottom' },
     content: {
       title: 'Bước 1',
+      description: 'Đây là trang nâng cao, bạn có thể tùy chỉnh QR Code theo phong cách cá nhân của bạn.'
+    }
+  },
+    {
+    attachTo: { element: '.step_nangcao_1', on: 'bottom' },
+    content: {
+      title: 'Bước 2',
       description: 'Đây là bước thay đổi kiểu QR Code, bạn hẫy lựa chọn kiểu QR phù hợp với phong cách.'
     }
   },
   {
     attachTo: { element: '.step_nangcao_2', on: 'top' },
     content: {
-      title: 'Bước 2',
+      title: 'Bước 3',
       description: 'Đây là bước thay đổi màu sắc QR Code, bạn có thể thay đổi màu của QR và màu nền của mình.'
     }
   },
   {
     attachTo: { element: '.step_nangcao_3', on: 'top' },
     content: {
-      title: 'Bước 3',
+      title: 'Bước 4',
       description: 'Đây là bước thêm ảnh, logo QR Code, bạn có thể thêm ảnh của QR tạo cá tính, cá nhân hóa chủ sở hữu QR.'
     }
   },
   {
     attachTo: { element: '.step_nangcao_4', on: 'top' },
     content: {
-      title: 'Bước 4',
+      title: 'Bước 5',
       description: 'Đây là bước thay đổi kích thước QR Code, lựa chọn kích thước phù hợp với công việc bạn sử dụng QR.'
     }
   },
   {
     attachTo: { element: '.step_nangcao_5', on: 'top' },
     content: {
-      title: 'Bước 5',
+      title: 'Bước 6',
       description: 'Đây là bước thay đổi định dạng file QR Code, DLTeam hỗ trợ các định dạng phổ biến bạn có thể sử dụng ngay lập tức'
     }
   },
   {
     attachTo: { element: '.step_nangcao_6', on: 'top' },
     content: {
-      title: 'Bước 6',
+      title: 'Bước 7',
       description: 'QR Code bạn tạo sẽ được hiện trực tiếp tại đây.'
     }
   },
   {
     attachTo: { element: '.step_nangcao_7', on: 'top' },
     content: {
-      title: 'Bước 7',
+      title: 'Bước 8',
       description: 'Đây là nút lưu QR Code bạn tạo về thư viện điện thoại.'
     }
   }
@@ -364,7 +370,7 @@ const steps2 = [
             :class="class_active == items.name ? 'active-card':'noactive-card'"
             @click="test_click(items)">
                     <div class="flex text-4xl mb-2 items-center justify-center">
-                        <img class="w-15 h-15 rounded-full" :src="'/public/images/'+items.icon"></img>
+                        <img loading="lazy" class="w-15 h-15 rounded-full" :src="'/public/images/'+items.icon"></img>
                     </div>
                     {{ items.name }}
             </div>
