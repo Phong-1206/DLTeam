@@ -46,7 +46,7 @@ const setLanguage = (language) => {
 
 const icon_logo = ref(reactive({
   name: "DLTeam",
-  logo:"https://flowbite.com/docs/images/logo.svg",
+  logo:"/src/assets/logo.svg",
   url: "/"
 
 }));

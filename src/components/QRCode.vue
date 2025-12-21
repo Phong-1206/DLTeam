@@ -12,6 +12,9 @@ import CreateQR from './CreateQR.vue';
 import label from 'daisyui/components/label';
 import { VOnboardingWrapper } from "v-onboarding";
 import "v-onboarding/dist/style.css";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 const test = ref("");
 const qrColor = ref()
 const qrColor_bg = ref()
@@ -342,20 +345,20 @@ const steps2 = [
 <div class="bg-white py-12 sm:py-12">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto max-w-2xl text-center">
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl lg:text-balance">Tạo QR - Code Miễn Phí</h1>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight text-pretty text-blue-600 sm:text-4xl lg:text-balance">{{ t("qrcode_title") }}</h1>
       <!--<p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">Tinh nang DLTeam</p>
     -->
       <p class="mt-4 text-lg/8 text-gray-700">
-        Tạo mã QR miễn phí, nhanh và an toàn với DLTeam – hỗ trợ liên kết, văn bản, Wi-Fi, danh thiếp và nhiều hơn nữa.
+        {{ t("qrcode_describe") }}
       </p>
     </div>
     <div class="mt-6 w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <ul class=" text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
             <li class="w-full">
-                <button @click="tab_active(true)" id="coban-tab" data-tabs-target="#coban" type="button" role="tab" aria-controls="coban" aria-selected="true" class="step_coban_1 inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Cơ bản</button>
+                <button @click="tab_active(true)" id="coban-tab" data-tabs-target="#coban" type="button" role="tab" aria-controls="coban" aria-selected="true" class="step_coban_1 inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">{{ t("qrcode_coban") }}</button>
             </li>
             <li class="w-full">
-                <button @click="tab_active(false)" id="nangcao-tab" data-tabs-target="#nangcao" type="button" role="tab" aria-controls="nangcao" aria-selected="false" class="step_coban_2 inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Nâng cao</button>
+                <button @click="tab_active(false)" id="nangcao-tab" data-tabs-target="#nangcao" type="button" role="tab" aria-controls="nangcao" aria-selected="false" class="step_coban_2 inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">{{ t("qrcode_nangcao") }}</button>
             </li>
         </ul>
     <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
@@ -385,7 +388,7 @@ const steps2 = [
             :placeholder="input_active.placeholder.placeholder" placeholder="Nhập tại đây"
         v-model="src_url_qr"
         />
-        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p>
+        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ t("qrcode_chinh_sach") }}<a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">{{ t("header_link_ref_dieu_khoang") }}</a>.</p>
         </div>
         <!-- <CreateQR :key_qr="refKey" :value_qr="src_url_qr" :image_qr="input_active.images"></CreateQR> -->
          <!-- <QRCodeVue3
@@ -403,7 +406,7 @@ const steps2 = [
         <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
             <div class="step_coban_5 flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
                 
-            <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
+            <p v-if="src_url_qr == '' " class="text-gray-400">{{ t("qrcode_mota_hien") }}</p>
             <div v-else>
                 <QRCodeVue3 
                             ref="qrRef"
@@ -425,7 +428,7 @@ const steps2 = [
         <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
         <button @click="DownloadPNG" class="step_coban_6 w-max p-20 bg-gradient-to-r bg-blue-700  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            <span>Lưu QR Code</span>
+            <span>{{ t("qrcode_save") }}</span>
         </button>
         </div>
 
@@ -438,16 +441,16 @@ const steps2 = [
 
 
 <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="nangcao" role="tabpanel" aria-labelledby="nangcao-tab">
-<h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6">Sáng tạo QR Code</h2>
+<h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 md:mb-6">{{ t("qrcode_sangtao") }}</h2>
 
 <div class="space-y-6">
     <div class="join join-vertical bg-base-100">
         <div class="collapse collapse-arrow join-item border-base-300 border">
             <input class="step_nangcao_1" type="radio" name="my-accordion-4" checked="checked" />
-            <div class="collapse-title font-semibold">Lựa chọn phong cách QR Code của bạn?</div>
+            <div class="collapse-title font-semibold">{{ t("qrcode_nc_title_pc") }}</div>
             <div class="collapse-content text-sm">
-            <p class="mb-2 text-body">DLTeam hỗ trợ nhiều kiểu QR Code khác nhau để bạn lựa chọn theo đúng phong cách và nhu cầu sử dụng. Từ kiểu truyền thống đến hiện đại, tất cả đều được tối ưu để dễ quét và phù hợp cho mọi tình huống như chia sẻ thông tin, liên kết, Wi-Fi hay cửa hàng.</p>
-            <p class="mb-2 text-body">Bạn có thể chọn Cổ điển để có độ tương thích cao, Hiện đại, Bo góc cân bằng và thân thiện, Giọt nước hoặc Giọt bo tròn mang cảm giác sang trọng, hoặc Bo tròn mạnh dành cho phong cách trẻ trung và mềm mại. DLTeam mang đến sự linh hoạt để bạn tạo mã QR đúng chất của riêng mình.</p>
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_pc_1") }}</p>
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_pc_2") }}</p>
             <div class="grid grid-cols-3 grid-rows-2 gap-3">
                 <div v-for="items in list_type_qr" class="card sm:max-w-sm">
                     <figure><img class="rounded-md" :src="'/public/images/img_qr/'+items.url_img+'.png'"  :alt="'DLTeam QR Code '+ items.name_type" :width="200" :height="200"/></figure>
@@ -487,41 +490,41 @@ const steps2 = [
         </div>
         <div class="step_nangcao_2 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
-            <div class="collapse-title font-semibold">Tùy chỉnh màu sắc QR Code</div>
+            <div class="collapse-title font-semibold">{{ t("qrcode_nc_title_ms") }}</div>
             <div class="collapse-content text-sm">
-            <p class="mb-2 text-body">DLTeam cho phép bạn tùy chỉnh màu sắc QR Code để phù hợp với thương hiệu, sở thích hoặc mục đích sử dụng của bạn. Bạn có thể thay đổi màu chính của mã QR chỉ với một thao tác đơn giản, giúp thiết kế trở nên nổi bật hơn và phù hợp với phong cách cá nhân.</p>
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_ms_1") }}</p>
             
             <div class="grid grid-cols-2 grid-rows-1 gap-3">
                 <div class="card sm:max-w-sm">
                     <figure><img class="rounded-md" src="/public/images/img_qr/color_qr.png"  alt="DLTeam QR Code Cổ Điển Màu Sắc QR" /></figure>
-                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Màu QR</p>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ t("qrcode_nc_des_ms_2") }}</p>
                 </div>
                 <div class="card sm:max-w-sm">
                     <figure><img class="rounded-md" src="/public/images/img_qr/color_bg_qr.png"  alt="DLTeam QR Code Cổ Điển Màu Nền QR" /></figure>
-                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Màu Nền QR</p>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ t("qrcode_nc_des_ms_3") }}</p>
                 </div>
             </div>
                 
             <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
-                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_color">QR Color:</label>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="qr_color">{{ t("qrcode_nc_des_ms_2") }}:</label>
                 <input type="color" v-model="qrColor" value="#000000" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
                 </div>
                 <div>
-                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="bg_color">Background Color:</label>
+                <label class="text-xs text-gray-600 dark:text-gray-400 font-medium mb-2 block" data-i18n="bg_color">{{ t("qrcode_nc_des_ms_2") }}:</label>
                 <input type="color" v-model="qrColor_bg" value="#ffffff" class="w-full h-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer">
                 </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Chú ý: Nên ưu tiên chọn màu (đen/trắng), vì độ tương phản cao giúp camera quét dễ dàng nhận dạng.</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ {{ t("qrcode_nc_des_ms_4") }}</p>
             
             </div>
             </div>
         </div>
         <div class="collapse collapse-arrow join-item border-base-300 border">
             <input class="step_nangcao_3" type="radio" name="my-accordion-4" />
-            <div class="collapse-title font-semibold">Thêm logo hoặc hình ảnh vào QR Code</div>
+            <div class="collapse-title font-semibold">{{ t("qrcode_nc_title_logo") }}</div>
             <div class="collapse-content text-sm">
-            <p class="mb-2 text-body">DLTeam hỗ trợ bạn thêm hình ảnh hoặc logo vào giữa QR Code để tăng độ nhận diện và tạo dấu ấn riêng. Bạn có thể tải ảnh trực tiếp từ thiết bị của mình, dễ dàng chèn vào QR chỉ với vài thao tác.</p> 
-            <p class="mb-2 text-body">Ngoài ra, DLTeam cũng cho phép bạn sử dụng logo sẵn có của các nền tảng phổ biến như Facebook, YouTube, TikTok, Zalo… giúp mã QR của bạn trông chuyên nghiệp và phù hợp hơn với nội dung liên kết. Tất cả đều được tối ưu để giữ khả năng quét ổn định và rõ ràng.</p>
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_logo_1") }}</p> 
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_logo_2") }}</p>
             <!-- <ul class="ps-5 text-body list-disc">
                 <li><a href="https://flowbite.com/pro/" class="text-fg-brand hover:underline">Flowbite Pro</a></li>
                 <li><a href="https://tailwindui.com/" rel="nofollow" class="text-fg-brand hover:underline">Tailwind UI</a></li>
@@ -529,15 +532,15 @@ const steps2 = [
             <div class="grid grid-cols-3 grid-rows-1 gap-3">
                 <div class="card sm:max-w-sm">
                     <figure><img class="rounded-md" src="/public/images/img_qr/type_co_dien.png"  alt="DLTeam QR Code Cổ Điển Mặc Định" /></figure>
-                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Mặc định</p>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ t("qrcode_nc_des_logo_3") }}</p>
                 </div>
                 <div class="card sm:max-w-sm">
                     <figure><img class="rounded-md" src="/public/images/img_qr/logo_media.png"  alt="DLTeam QR Code Logo Mạng Xã Hội" /></figure>
-                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Logo mạng xã hội</p>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ t("qrcode_nc_des_logo_4") }}</p>
                 </div>
                 <div class="card sm:max-w-sm">
                     <figure><img class="rounded-md" src="/public/images/img_qr/logo_add.png"  alt="DLTeam QR Code Thêm Từ Thư Viện" /></figure>
-                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">Ảnh thư viện</p>
+                    <p class="mt-3 text-body text-center font-medium text-gray-500 dark:text-neutral-500">{{ t("qrcode_nc_des_logo_5") }}</p>
                 </div>
             </div>
             <div class="space-y-3 mt-3">
@@ -545,54 +548,54 @@ const steps2 = [
                 <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
                 <input type="radio" name="ip_image" v-model="ip_image" value="false" class="mr-3 w-4 h-4 text-indigo-600">
                 <div class="flex-1">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Mặc định</span>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ t("qrcode_nc_des_logo_3") }}</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: {{ t("qrcode_nc_des_logo_6") }}</p>
                 </div>
                 </label>
 
                 <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
                 <input type="radio"  name="ip_image" v-model="ip_image" value="logo_media" class="mr-3 w-4 h-4 text-indigo-600">
                 <div class="flex-1">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Thêm Logo</span>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ t("qrcode_nc_des_logo_7") }}</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: {{ t("qrcode_nc_des_logo_8") }}</p>
                 </div>
                 </label>
                 
                 <label class="flex items-center p-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 transition-all">
                 <input type="radio" name="ip_image" v-model="ip_image" value="true" class="mr-3 w-4 h-4 text-indigo-600">
                 <div class="flex-1">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Thêm ảnh thư viện</span>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: Square image (1:1), minimum 200x200px, transparent background recommended</p>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ t("qrcode_nc_des_logo_9") }}</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tip: {{t("qrcode_nc_des_logo_10")}}</p>
                 </div>
                 </label>
 
                 <input v-if="ip_image == 'true'" type="file" @change="file_img" class="w-full px-4 py-3 border-2 input-bg rounded-xl transition-all">
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Note: Use high contrast colors (black/white) for best scanability. Light or similar colors may reduce scanning ability.</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ {{ t("qrcode_nc_des_logo_11") }}.</p>
             
             </div>
         </div>
         <div class="step_nangcao_4 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
-            <div class="collapse-title font-semibold">Tùy chỉnh kích thước QR Code</div>
+            <div class="collapse-title font-semibold">{{ t("qrcode_nc_title_kichthuoc") }}</div>
             <div class="collapse-content text-sm">
-            <p class="mb-2 text-body">DLTeam cho phép bạn tùy chỉnh kích thước QR Code theo nhu cầu sử dụng. Bạn có thể dễ dàng tăng hoặc giảm kích thước để phù hợp với mục đích in ấn, chia sẻ online hoặc sử dụng trên các tài liệu thiết kế.</p> 
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_kichthuoc_1") }}</p> 
             <div class="space-y-3">
                 <label for="visitors" class="block mb-2.5 text-sm font-medium text-heading">Kích thước:</label>
                     <input type="number" v-model="size_qr" class="bg-neutral-secondary-medium border border-default-medium rounded-md text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-2.5 py-2 shadow-xs placeholder:text-body" placeholder="200px, 300px, 400px,..." required />
             
             </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ Chú ý: Bạn nên chọn 200px - 800px, dựa trên nhu cầu sử dụng của bạn.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">⚠️ {{ t("qrcode_nc_des_kichthuoc_2") }}</p>
             </div>
         </div>
         <div class="step_nangcao_5 collapse collapse-arrow join-item border-base-300 border">
             <input type="radio" name="my-accordion-4" />
-            <div class="collapse-title font-semibold">Định dạng tải về QR Code</div>
+            <div class="collapse-title font-semibold">{{ t("qrcode_nc_title_dinhdang") }}</div>
             <div class="collapse-content text-sm">
-            <p class="mb-2 text-body">DLTeam có nhiều định dạng tải xuống phú hợp với mọi công việc, nhu cầu sử dụng. Bạn dễ dàng tải xuống đúng định dang của mình chỉ với một cú nhấp chuột. </p> 
+            <p class="mb-2 text-body">{{ t("qrcode_nc_des_dinhdang_1") }}</p> 
             
             <div class="space-y-3">
                 <div class="flex items-center">
-                    <label for="duoi_file" class="block mb-2.5 text-sm font-medium text-heading">Định dạng</label>
+                    <label for="duoi_file" class="block mb-2.5 text-sm font-medium text-heading">{{ t("qrcode_nc_des_dinhdang_2") }}</label>
                     <select id="duoi_file" v-model="duoi_file" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium rounded-md text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                         <option value="png">PNG</option>
                         <option value="jpeg">JPEG</option>
@@ -606,7 +609,7 @@ const steps2 = [
         </div>
         <div class="card-bg rounded-xl p-4 md:p-6 border border-gray-200 mb-6">
             <div id="qrcode" class="step_nangcao_6 flex justify-center p-6 bg-white rounded-xl border-2 border-gray-300 dark:border-gray-500 min-h-[340px] items-center">
-                <p v-if="src_url_qr == '' " class="text-gray-400">QR Code của bạn hiện tại đây!</p>
+                <p v-if="src_url_qr == '' " class="text-gray-400">{{ t("qrcode_mota_hien") }}</p>
                 <div v-else>
                     <QRCodeVue3 
                                 ref="qrRef"
@@ -628,7 +631,7 @@ const steps2 = [
         <div class="flex card-bg rounded-xl p-4 md:p-6 border border-gray-200  justify-center items-center">
             <button @click="DownloadPNG" class="step_nangcao_7 w-max p-20 bg-gradient-to-r bg-blue-600  hover:bg-blue-900S text-white font-bold py-4 px-4 rounded-xl transition-all transform hover:scale-105 shadow-lg flex flex-col items-center gap-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span>Lưu QR Code</span>
+                <span>{{ t("qrcode_save") }}</span>
             </button>
         </div>
     </div>
